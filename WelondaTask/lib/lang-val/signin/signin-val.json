@@ -1,0 +1,18 @@
+{
+  "Username": {
+    "label": "mandatory",
+    "data-attr": "val",
+    "maxlength": 50,
+    "class": "validate validate-userpass",
+    "datatype": "string",
+    "tabindex": 1
+  },
+  "Password": {
+    "label": "mandatory",
+    "data-attr": "val",
+    "maxlength": 50,
+    "class": "validate validate-userpass",
+    "datatype": "string",
+    "tabindex": 2
+  }
+}

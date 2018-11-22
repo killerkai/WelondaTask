@@ -1,0 +1,54 @@
+﻿{
+  "ObjElements": {
+    "en-US": [
+      { "signinInfo": [ "id", "text", "Enter your username and password." ] },
+      { "Username": [ "id", "placeholder", "Username" ] },
+      { "Password": [ "id", "placeholder", "Password" ] },
+      { "Email": [ "id", "placeholder", "Email" ] },
+      { "cmdSignIn": [ "id", "text", "Sign In" ] },
+      { "cmdForgotPassword": [ "id", "text", "Forgot Password" ] },
+      { "cmdSendEmail": [ "id", "text", "Send" ] },
+      { "cmdBackToSigin": [ "id", "text", "Back" ] },
+      { "cmdLanguage": [ "id", "text", "Language" ] }
+    ],
+    "nb-NO": [
+      { "signinInfo": [ "id", "text", "Skriv inn ditt brukernavn og passord." ] },
+      { "Username": [ "id", "placeholder", "Brukernavn" ] },
+      { "Password": [ "id", "placeholder", "Passord" ] },
+      { "Email": [ "id", "placeholder", "Epost" ] },
+      { "cmdSignIn": [ "id", "text", "Logg Inn" ] },
+      { "cmdForgotPassword": [ "id", "text", "Glemt Passord" ] },
+      { "cmdSendEmail": [ "id", "text", "Send" ] },
+      { "cmdBackToSigin": [ "id", "text", "Tilbake" ] },
+      { "cmdLanguage": [ "id", "text", "Språk" ] }
+    ]
+  },
+  "SingleElements": {
+    "en-US": {
+      "labelPageTitle": "Sign In | Welonda Task",
+      "signinDefaultMessage": "Enter your username and password.",
+      "UsernameSubmitError": "Please enter your username.",
+      "PasswordSubmitError": "Please enter your password.",
+      "emailDefaultMessage": "Enter your email adress.",
+      "noEmailReg": "No profile registrated",
+      "emailSubmitError": "Please enter your email adress.",
+      "emailSendt": "Password is sendt to your Email.",
+      "signinErrorWrongUsernameDeactivated": "Incorrect username or your account is deactivated.",
+      "signinErrorWrongPasswordDeactivated": "Incorrect password or your account is deactivated.",
+      "signinErrorWrongUsernamePasswordDeactivated": "Incorrect username, password or your account is deactivated."
+    },
+    "nb-NO": {
+      "labelPageTitle": "Logg Inn | Welonda Task",
+      "signinDefaultMessage": "Skriv inn ditt brukernavn og passord.",
+      "UsernameSubmitError": "Vennligst skriv inn ditt brukernavn.",
+      "PasswordSubmitError": "Vennligst skriv inn ditt passord.",
+      "emailDefaultMessage": "Skriv inn din epost adresse.",
+      "noEmailReg": "Ingen profil registrert.",
+      "emailSubmitError": "Vennligst skriv inn din epost adresse.",
+      "emailSendt": "Passordet er sendt til din epost.",
+      "signinErrorWrongUsernameDeactivated": "Feil brukernavn eller din konto er deaktivert.",
+      "signinErrorWrongPasswordDeactivated": "Feil passord eller din konto er deaktivert.",
+      "signinErrorWrongUsernamePasswordDeactivated": "Feil brukernavn, passord eller din konto er deaktivert."
+    }
+  }
+}

@@ -1,0 +1,28 @@
+﻿{
+  "ObjElements": {
+    "en-US": [
+      { "menu1": [ "id", "text", " Home" ] },
+      { "menu2": [ "id", "text", " Task" ] },
+      { "menu3": [ "id", "text", " Customers" ] },
+      { "menu4": [ "id", "text", " Statistics" ] },
+      { "menu5": [ "id", "text", " Calculation" ] },
+      { "signOut": [ "id", "text", " Sign Out" ] }
+    ],
+    "nb-NO": [
+      { "menu1": [ "id", "text", " Hjem" ] },
+      { "menu2": [ "id", "text", " Oppgaver" ] },
+      { "menu3": [ "id", "text", " Kunder" ] },
+      { "menu4": [ "id", "text", " Statistikk" ] },
+      { "menu5": [ "id", "text", " Utregning" ] },
+      { "signOut": [ "id", "text", " Logg ut" ] }
+    ]
+  },
+  "SingleElements": {
+    "en-US": {
+      "LabeleditUserTitle": "Edit user"
+    },
+    "nb-NO": {
+      "LabeleditUserTitle": "Rediger bruker"
+    }
+  }
+}

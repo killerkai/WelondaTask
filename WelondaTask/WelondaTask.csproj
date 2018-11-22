@@ -68,12 +68,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="api\forgotpassword.asp" />
+    <Content Include="api\logginn.asp" />
+    <Content Include="default.asp" />
+    <Content Include="fpdb\land.mdb" />
+    <Content Include="fpdb\postkontor.mdb" />
+    <Content Include="fpdb\welonda.mdb" />
+    <Content Include="img\3013_kiela_06022018.jpg" />
+    <Content Include="img\bio.jpg" />
+    <Content Include="img\favicon.ico" />
+    <Content Include="img\welonda-logo_rot1166X250.png" />
+    <Content Include="img\Welonda.png" />
+    <Content Include="img\Welonda1.png" />
+    <Content Include="lib\functionlib.js" />
+    <Content Include="lib\lang-val\default.js" />
+    <Content Include="lib\standard.css" />
+    <Content Include="login.asp" />
+    <Content Include="pages\edituser.asp" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="lib\lang-val\signin\signin-lang.json" />
+    <Content Include="lib\lang-val\signin\signin-val.json" />
+    <Content Include="lib\lang-val\default\default-lang.json" />
+    <Content Include="lib\lang-val\edituser\edituser-lang.json" />
+    <Content Include="lib\lang-val\edituser\edituser-val.json" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -82,6 +104,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

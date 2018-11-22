@@ -1,0 +1,24 @@
+﻿{
+  "ObjElements": {
+    "en-US": [
+      { "labelFirstName": [ "id", "text", "First Name" ] },
+      { "labelLastName": [ "id", "text", "Last Name" ] },
+      { "labelEmail": [ "id", "text", "Email" ] },
+      { "LableEmailNotifacatin": [ "id", "text", "Email Notification" ] }
+    ],
+    "nb-NO": [
+      { "labelFirstName": [ "id", "text", "Fornavn" ] },
+      { "labelLastName": [ "id", "text", "Etternavn" ] },
+      { "labelEmail": [ "id", "text", "Epost" ] },
+      { "LableEmailNotifacatin": [ "id", "text", "Epost varsling" ] }
+    ]
+  },
+  "SingleElements": {
+    "en-US": {
+      
+    },
+    "nb-NO": {
+      
+    }
+  }
+}
