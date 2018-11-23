@@ -72,7 +72,8 @@
                     dialogiFrameURL: "pages/edituser.asp",
                     dialogPosition: true,
                     dialogPositionOf: $("#cmdModalUser"),
-                    dialogNoParentScroll: true
+                    dialogNoParentScroll: true,
+                    dialogTitlebarClose: false
                 });
         }
     </script>

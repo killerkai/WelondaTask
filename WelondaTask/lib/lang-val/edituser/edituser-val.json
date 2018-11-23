@@ -7,19 +7,19 @@
     "datatype": "string",
     "tabindex": 1
   },
+  "LastName": {
+    "label": "mandatory",
+    "data-attr": "val",
+    "class": "validate validate-alpha",
+    "datatype": "string",
+    "tabindex": 2
+  },
   "Email": {
     "label": "mandatory",
     "data-attr": "val",
     "maxlength": "100",
     "class": "validate validate-email",
     "datatype": "string",
-    "tabindex": 2
-  },
-  "LastName": {
-    "label": "mandatory",
-    "data-attr": "val",
-    "class": "validate validate-alpha",
-    "datatype": "int",
     "tabindex": 3
   }
 }

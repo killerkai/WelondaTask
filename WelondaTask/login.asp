@@ -77,7 +77,7 @@
             $("#AppVersion").text(SingleNonLanguageElements.labelAppVersion + " " + AppVersion);
             clientStorage("set", "language", ThisLanguage);
         }
-        function submitsendemail()        {        showCoverSpin();
+        function submitsendemail()        {            showCoverSpin();
 	 	    var output = "email=" + $('#Email').val();     	
 		    $.ajaxSetup({cache: false});
 		    $.ajax(

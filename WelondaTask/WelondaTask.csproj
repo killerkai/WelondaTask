@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="api\edituser.asp" />
     <Content Include="api\forgotpassword.asp" />
     <Content Include="api\logginn.asp" />
     <Content Include="default.asp" />

@@ -15,9 +15,14 @@
   },
   "SingleElements": {
     "en-US": {
-      
+      "FirstNameSubmitError": "First Name is empty or contains invalid characters.",
+      "LastNameSubmitError": "Last Name is empty or contains invalid characters.",
+      "EmailSubmitError": "Email is empty or contains invalid characters."
     },
     "nb-NO": {
+      "FirstNameSubmitError": "Fornavn er tomt eller inneholder ugyldige tegn.",
+      "LastNameSubmitError": "Etternavn er tomt eller inneholder ugyldige tegn.",
+      "EmailSubmitError": "E-post er tomt eller inneholder ugyldige tegn."     
       
     }
   }

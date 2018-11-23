@@ -21,7 +21,7 @@
     <script>
         if (!localStorage.bruker || localStorage.bruker == "")
         {
-	        window.location.href = "login.asp";
+	        window.location.href = "../login.asp";
         }
 
         LanguagePage = "../lib/lang-val/edituser/edituser-lang.json";        ValidationPage = "../lib/lang-val/edituser/edituser-val.json";
@@ -33,7 +33,7 @@
         function getContentData()
         {
             initializePage(
-            {
+            {     
                 setLanguageClientStorage: true,
                 getLanguage: true,
                 getValidation: true
@@ -43,26 +43,100 @@
             });
         }       
         function setContentInfo()
-        {
+        {                 
+         var radioState;
+         $("#emailNotifacatin").click(function(){
+                if (radioState === this) {
+                $("#emailNotifacatin").val("true");
+                localStorage.epostvarsel = true
+                radioState = null;
+                } else {
+                    $("#emailNotifacatin").val("false");
+                    localStorage.epostvarsel = false
+                    radioState = this;
+                }            
+            });
          $("#FirstName").val(localStorage.fornavn);
          $("#LastName").val(localStorage.etternavn);
          $("#Email").val(localStorage.userName);         
          if (localStorage.epostvarsel == "true")
             {
                 $("#emailNotifacatin").prop('checked', true);
+                $("#emailNotifacatin").val("true");
+            }
+        if (localStorage.epostvarsel == "false")
+            {
+                $("#emailNotifacatin").prop('checked', false);
+                $("#emailNotifacatin").val("false");
             }
          formdirty = false;
          hideCoverSpin();
          $("#" + ThisFormId).show();
         }         function validateDirty()
         {
-            formdirty = true;
-            $("#cmdSubmit").prop("disabled", false);
+            formdirty = true;            
         }        function verifyCancel()
         {
             confirmCancel(function () { window.top.closeModalDialog() });
         }        function verifySubmit()
-        {        }        
+        {        var _ObjForm = serializeForm("#" + ThisFormId);
+        if (isEmpty(_ObjForm) == false)
+        {            var brukerid = localStorage.brukerid            showCoverSpin();
+	 	    var output = "firstname=" + $('#FirstName').val() + "&lastname=" + $('#LastName').val()+ "&email=" + $('#Email').val()+ "&emailnotification=" + $('#emailNotifacatin').val()+ "&brukerid=" + brukerid; 		    
+            $.ajaxSetup({cache: false});
+		    $.ajax(
+		    {
+			    type: "POST",
+			    url: "../api/edituser.asp",						
+		        data: output,
+		        dataType: 'json',					   
+		        async: true,
+		        cache: false,
+		        timeout: 100000,
+			    error: function()
+			    {    
+                    hideCoverSpin(); 
+                    initializeAZWindow(
+                        {
+                            dialogTitle: SingleDefaultElements.errorDialogAlertTitle,
+                            dialogText: SingleDefaultElements.errorDialogAlertText
+                        });				
+			    },
+			    success: function(responseText)			
+			    {
+                if (responseText.Transfer == "emptystring")
+			    {  
+                    hideCoverSpin(); 
+                    initializeAZWindow(
+                        {
+                            dialogTitle: SingleDefaultElements.errorDialogAlertTitle,
+                            dialogText: SingleDefaultElements.errorDialogAlertText
+                        });	
+                }
+                if (responseText.Transfer == "ok")
+			    {  
+                    window.setTimeout(function ()
+                    {
+                        localStorage.fornavn = $("#FirstName").val();
+			            localStorage.etternavn = $("#LastName").val();
+			            localStorage.userName = $("#Email").val();
+			            localStorage.epostvarsel = $("#emailNotifacatin").val();
+                        parent.$("#userFname").text("");
+                        parent.$("#userLname").text("");
+                        parent.$("#userFname").append(localStorage.fornavn);
+                        parent.$("#userLname").append(localStorage.etternavn);
+                        formdirty = false;
+                        changeModalTitlebar(
+                        {
+                            dialogTitle: SingleDefaultElements.labelTopsliderChangesHaveBeenSaved,
+                            dialogAlertClass: 'az-alert-primary',
+                            dialogTitleTimeout: 3000
+                        });
+                        hideCoverSpin();                         
+                    }, 1000);
+                    
+                    
+			    }            }         });        }                }        
     </script>
 </head>
 <body class="az-bg-white">
@@ -90,10 +164,10 @@
                         <label class="az-label" for="Email" id="labelEmail"></label>
                         <input type="text" class="az-input" id="Email" />
                     </div>
-                </div>                
+                </div>
                 <div class="az-col xs-12 sm-6">
                     <div class="az-form-group">
-                        <input id="emailNotifacatin" class="az-radio" type="checkbox" value="false">
+                        <input id="emailNotifacatin" class="az-radio" type="checkbox" value="">
                         <label id="LableEmailNotifacatin" class="az-label"></label>
                     </div>
                 </div>
