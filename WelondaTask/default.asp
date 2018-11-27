@@ -68,12 +68,13 @@
                 {
                     dialogTitle: SingleElements.LabeleditUserTitle,
                     dialogWidth: 600,
-                    dialogHeight: 350,
+                    dialogHeight: 250,
                     dialogiFrameURL: "pages/edituser.asp",
                     dialogPosition: true,
                     dialogPositionOf: $("#cmdModalUser"),
                     dialogNoParentScroll: true,
-                    dialogTitlebarClose: false
+                    dialogTitlebarClose: false,
+                    dialogNoParentScroll: true
                 });
         }
     </script>
@@ -116,6 +117,7 @@
         <div id="section-2" class="az-section az-bg-teal" style="height: 1200px;">
             <div class="az-container">
                 <h1>Task</h1>
+
             </div>
         </div>
 

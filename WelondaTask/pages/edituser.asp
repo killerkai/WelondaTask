@@ -74,7 +74,8 @@
          $("#" + ThisFormId).show();
         }         function validateDirty()
         {
-            formdirty = true;            
+            formdirty = true;        
+            $("#cmdClose").text(SingleDefaultElements.cmdCancelText);
         }        function verifyCancel()
         {
             confirmCancel(function () { window.top.closeModalDialog() });
@@ -132,6 +133,7 @@
                             dialogAlertClass: 'az-alert-primary',
                             dialogTitleTimeout: 3000
                         });
+                        $("#cmdClose").text(SingleDefaultElements.cmdCloseText);
                         hideCoverSpin();                         
                     }, 1000);
                     
