@@ -1,0 +1,397 @@
+﻿<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="date=no" />
+    <meta name="format-detection" content="address=no" />
+    <meta name="format-detection" content="email=no" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title></title>
+    <link rel="stylesheet" href="//cdn.web2net.no/lib-1.0.0/css/az-1.0.0.min.css" />
+    <script src="//cdn.web2net.no/lib-1.0.0/js/az-1.0.0.min.js"></script>
+    <link href="lib/standard.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon" />
+    <script src="lib/functionlib.js"></script>
+    <script>
+        if ( !localStorage.bruker || localStorage.bruker == "" )
+        {
+            window.location.href = "login.html";
+        }
+
+        LanguagePage = "lib/lang-val/default/default-lang.json";
+        activePage = "section1";
+        LastAccordion = "";
+        $( document ).ready( function ()
+        {
+            getContentData();
+        } );
+
+        function getContentData()
+        {
+            initializePage(
+                {
+                    setLanguageClientStorage: true,
+                    getLanguage: true
+                }, function ()
+                {
+                    setContentInfo();
+                    hideCoverSpin();
+                } );
+        }
+        function setContentInfo()
+        {
+            $( "#cmdModalUser" ).off( "click", setModalUser ).on( "click", setModalUser );
+            $( "#cmdSignOut" ).click( function () { signOut(); } );
+            $( "#cmdTaskOpen" ).click( function () { LastAccordion = ""; getservicelist( "apene_full" ); } );
+            $( "#cmdTaskDone" ).click( function () { LastAccordion = ""; getservicelist( "ut_full" ); } );
+            $( "#cmdTaskAll" ).click( function () { LastAccordion = ""; getservicelist( "alle_full" ); } );           
+            $( "#menu1" ).click( function () { changeInOut( activePage, "section1" ); } );
+            $( "#menu2" ).click( function () { changeInOut( activePage, "section2" ); getservicelist( "apene_full" ); } );
+            $( "#menu3" ).click( function () { changeInOut( activePage, "section3" ); } );
+            $( "#menu4" ).click( function () { changeInOut( activePage, "section4" ); } );
+            $( "#menu5" ).click( function () { changeInOut( activePage, "section5" ); } );
+            $( "#userFname" ).text( "" );
+            $( "#userLname" ).text( "" );
+            $( "#userFname" ).append( localStorage.fornavn );
+            $( "#userLname" ).append( localStorage.etternavn );
+            hideCoverSpin();
+        }
+        function changeInOut( changeOut, changeIn )
+        {
+            $( "#" + changeOut ).hide();
+            $( "#" + changeIn ).show();
+            activePage = changeIn;
+        }
+        function signOut()
+        {
+            showCoverSpin();
+            localStorage.bruker = "";
+            localStorage.fornavn = "";
+            localStorage.etternavn = "";
+            localStorage.status = "";
+            localStorage.brukerid = "";
+            localStorage.brukertype = "";
+            localStorage.epostvarsel = "";
+            localStorage.userName = "";
+            window.setTimeout( function ()
+            {
+                window.location.href = "login.html";
+            }, 500 );
+
+        }
+
+        function setModalShowTask( TaskId, TaskNo, KundeId )
+        {
+            initializeModalDialog(
+                {
+                    dialogTitle: SingleElements.LabeleditTaskTitle + " # " + TaskNo,
+                    dialogWidth: 700,
+                    dialogHeight: 600,
+                    dialogiFrameURL: "pages/show_service.html?TaskId=" + TaskId + "&KundeId=" + KundeId,
+                    dialogPosition: true,
+                    dialogNoParentScroll: true,
+                    dialogTitlebarClose: false
+                } );
+        }
+
+        function setModaldeleteService( TaskId )
+        {
+            var _HTML = "";
+            _HTML = '<div class="az-row">';
+            _HTML += '<div class="az-col xs-12">';
+            _HTML += '<div class="az-form-group">';
+            _HTML += '<p id="DeleteServiceAlertInfo" class="az-alert az-alert-default">' + SingleDefaultElements.alertContentDeleteText + '</p>';
+            _HTML += '</div>';
+            _HTML += '</div>';
+            _HTML += '</div>';
+            _HTML += '<div class="az-row az-margin-t-28 az-margin-b-14">';
+            _HTML += '<div class="az-col xs-6 az-text-right">';
+            _HTML += '<div class="az-form-group">';
+            _HTML += '<button type="button" class="az-button info az-shadow-1 az-shadow-hover-2" id="cmdDeleteTaskCancel" style="width: 60%; margin-right: 4px;"></button>';
+            _HTML += '</div>';
+            _HTML += '</div>';
+            _HTML += '<div class="az-col xs-6 az-text-left">';
+            _HTML += '<div class="az-form-group">';
+            _HTML += '<button type="button" class="az-button danger az-shadow-1 az-shadow-hover-2" id="cmdDeleteTaskDelete" style="width: 60%; margin-left: 4px;"></button>';
+            _HTML += '</div>';
+            _HTML += '</div>';
+            _HTML += '</div>';
+            $.subscribeonce( "functionlib/initializeAZWindow", function ( e )
+            {
+
+                $( "#cmdDeleteTaskCancel" ).off().on( 'click', function ()
+                {
+                    closeAZWindow();
+                } );
+                $( "#cmdDeleteTaskDelete" ).off().on( 'click', function ()
+                {
+                    deleteService( TaskId );
+                } );
+
+            } );
+            initializeAZWindow(
+                {
+                    dialogModal: true,
+                    dialogTitle: SingleDefaultElements.alertContentDeleteTitle,
+                    dialogText: _HTML
+                } );
+            $( "#cmdDeleteTaskCancel" ).text( SingleDefaultElements.cmdCancelText );
+            $( "#cmdDeleteTaskDelete" ).text( SingleDefaultElements.cmdDeleteText );
+            console.log( TaskId );
+        }
+        function deleteService( TaskId )
+        {
+            showCoverSpin();
+            var output = "taskid=" + TaskId;
+            $.ajaxSetup( { cache: false } );
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "api/delete_service.asp",
+                    data: output,
+                    dataType: 'json',
+                    async: true,
+                    cache: false,
+                    timeout: 100000,
+                    error: function ()
+                    {
+                        $( "#signinInfo" ).text( "Error1, Noe gikk galt, prøv igjen." );
+                    },
+                    success: function ( responseText )
+                    {
+                        if ( responseText.Transfer == "emptystring" )
+                        {
+                            hideCoverSpin();
+                            $( "#cmdDeleteTaskDelete, #cmdDeleteTaskCancel" ).hide();
+                            $( "#DeleteServiceAlertInfo" ).text( SingleDefaultElements.errorDialogAlertTitle ).addClass( 'az-alert az-alert-danger' ).show();
+                            window.setTimeout( function ()
+                            {
+                                $( "#DeleteServiceAlertInfo" ).text( SingleDefaultElements.alertTransferError ).removeClass( 'az-alert az-alert-danger' ).addClass( 'az-alert az-alert-info' ).show();
+                            }, 3000 );
+                        }
+                        if ( responseText.Transfer == "ok" )
+                        {
+                            getservicelist( "apene_full" );
+                            showSnackbar(
+                                {
+                                    snackbarText: SingleDefaultElements.alertContentDeletedText
+                                } );
+                            closeAZWindow();
+                        }
+                    }
+                } );
+        }
+        function setModalUser()
+        {
+
+            initializeModalDialog(
+                {
+                    dialogTitle: SingleElements.LabeleditUserTitle,
+                    dialogWidth: 600,
+                    dialogHeight: 250,
+                    dialogiFrameURL: "pages/edituser.html",
+                    dialogPosition: true,
+                    dialogPositionOf: $( "#cmdModalUser" ),
+                    dialogNoParentScroll: true,
+                    dialogTitlebarClose: false,
+                    dialogNoParentScroll: true
+                } );
+        }
+        function getservicelist( sort )
+        {
+            showCoverSpin();
+            var output = "mode=" + escape( sort ) + "&kundeid=" + $( "#kundeID" ).val() + "&utforesav=" + localStorage.brukerid;
+            $.ajaxSetup( { cache: false } );
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "api/getservice_data.asp",
+                    data: output,
+                    dataType: 'json',
+                    async: true,
+                    cache: false,
+                    timeout: 100000,
+                    error: function ()
+                    {
+                        hideCoverSpin();
+                        initializeAZWindow(
+                            {
+                                dialogTitle: SingleDefaultElements.errorDialogAlertTitle,
+                                dialogText: SingleDefaultElements.LoadDataError
+                            } );
+
+
+                    },
+                    success: function ( responseText )
+                    {
+                        var _HTML = "";
+                        servicelistekunde = responseText.service;                        
+                        $( "#TaskCount" ).text( responseText.service.length );
+                        $.each( servicelistekunde, function ( i, val )
+                        {                            
+                            _HTML += '<div data-taskno=" ' + val.servicenummer + ' " data-kundeId=" ' + val.kundeid + ' " data-taskid=" ' + val.serviceid + ' " class="az-accordion-card">';
+                            if ( val.status == 1 && val.fakturert > 0 ) // service er fullført
+                            {
+                                _HTML += '<header class="az-bg-green">';
+                            }
+                            else if ( val.status == 2 ) // service er åpen + haster
+                            {
+                                _HTML += '<header class="az-bg-red">';
+                            }
+                            else if ( val.status == 0 ) // service er åpen
+                            {
+                                _HTML += '<header class="az-bg-white">';
+                            }
+                            _HTML += '<h1><i class="fas fa-bars"></i><span class="az-margin-l-14 LinkShowTask">' + val.servicenummer + '</span><span class="az-margin-l-14">' + val.regdato + '</span><span class="az-margin-l-14">' + val.kunde + '</span><span class="az-margin-l-14">' + val.beskrivelseingress + '</span></h>';
+                            _HTML += '</header>';
+                            _HTML += '<article class="az-bg-silver borderLeftGreen shadowInner">';
+                            _HTML += '<p>' + val.beskrivelse + '</p>';
+                            _HTML += '<p>' + val.ubeskrivelse + '</p>';
+                            _HTML += '<p>&nbsp;</p>';
+                            _HTML += '<button type="button" class="az-button az-shadow-1 az-shadow-hover-2 cmdShowTask"></button>';
+                            if ( val.status == 2 || val.status == 0 )
+                            {
+                                _HTML += '<button type="button" class="az-button az-shadow-1 az-shadow-hover-2 cmdDeleteTask"></button>';
+                            }                            
+                            _HTML += "</article>";
+                            _HTML += "</div>";
+                        } ),
+
+                        $( "#place_taskliste" ).empty().append( _HTML );                       
+                        setAccordion( LastAccordion );
+                       // getContentData();
+                        var _$AccordionCard = $( ".az-accordion-card" );
+                        _$AccordionCard.off().on( "click", function ( e )
+                        {
+                            var _Element = e.target || e.srcElement;                            
+                            var _TaskId = Number( $( this ).attr( 'data-taskid' ) );
+                            var _TaskNo = Number( $( this ).attr( 'data-taskno' ) );
+                            var _KundeId = Number( $( this ).attr( 'data-kundeId' ) );
+                            if ( $( _Element ).hasClass( "cmdShowTask" ) || $( _Element ).hasClass( "cmdDeleteTask" ) || $( _Element ).hasClass( "LinkShowTask" ) )
+                            {
+                                if ( $( _Element ).hasClass( "cmdDeleteTask" ) )
+                                {
+                                    setModaldeleteService( _TaskId );
+                                }
+                                else if ( $( _Element ).hasClass( "cmdShowTask" ) )
+                                {
+                                    //setAccordion($(this).index());
+                                    LastAccordion = $( this ).index();
+                                    setModalShowTask( _TaskId, _TaskNo, _KundeId );
+                                }
+                                else
+                                {
+                                    e.stopPropagation();
+                                    setAccordion( $( this ).index() );
+                                    LastAccordion = $( this ).index();
+                                    setModalShowTask( _TaskId, _TaskNo, _KundeId );
+                                }
+                            }
+                        } );
+                    }
+                } );
+            hideCoverSpin();
+        }
+
+    </script>
+    <style>
+        #place_taskliste {
+            height: 400px;
+            overflow: auto;
+        }
+
+        .borderLeftGreen {
+            border-left: 5px solid green !important;
+        }
+
+        .LinkShowTask {
+            border-bottom: 1px solid blue !important;
+        }
+    </style>
+</head>
+<body class="az-bg-white">
+    <form id="frmReg" class="az-bg-white">
+
+        <div class="az-navbar az-navbar-top az-navbar-sticky">
+            <div class="az-navbar-top-content">
+                <button type="button" class="az-navbar-button">&#9776;</button>
+                <img class="az-navbar-branding" alt="" src="img/welonda1.png" />
+                <div class="az-navbar-menu-wrapper">
+                    <ul class="az-navbar-menu az-left">
+                        <li id="menu1"><a href="#section1"><i class="fas fa-home fa-fw"></i><span class="menu1"></span></a></li>
+                        <li id="menu2"><a href="#section2"><i class="fas fa-tasks"></i><span class="menu2"></span></a></li>
+                        <li id="menu3"><a href="#section3"><i class="fas fa-users"></i><span class="menu3"></span></a></li>
+                        <li id="menu4"><a href="#section4"><i class="fas fa-chart-line"></i><span class="menu4"></span></a></li>
+                        <li id="menu5"><a href="#section5"><i class="fas fa-calculator"></i><span class="menu5"></span></a></li>
+                    </ul>
+                    <ul class="az-navbar-menu az-right">
+                        <li id="cmdModalUser"><a href="javascript:void(0);closeNavbarMobile();"><i class="fas fa-user"></i><span>&nbsp;</span><span id="userFname"></span><span>&nbsp;</span><span id="userLname"></span></a></li>
+                        <li id="cmdSignOut"><a href="javascript:void(0)"><i class="fas fa-sign-out-alt"></i><span id="signOut"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="az-navbar az-navbar-bottom az-navbar-sticky">
+            <div class="az-navbar-bottom-content ka-text-center">
+                <div class="az-col xs-12 az-white az-text-tiny "><i class="fas fa-copyright fa-fw "></i>2018 Welonda Norway AS</div>
+            </div>
+        </div>
+
+        <div id="section1" class="az-section">
+            <div class="az-container az-bg-silver az-padding-t-56" style="height: 600px;">
+                <div class="az-col xs-12 sm-12 az-blue-grey az-text-medium az-margin-t-28 az-margin-l-28"><i class="fas fa-home"><span class="menu1"></span></i></div>
+            </div>
+        </div>
+        <div id="section2" class="az-section" style="display: none">
+            <div class="az-container az-bg-silver az-padding-t-56" style="height: 600px;">
+                <div class="az-row">
+                    <div class="az-col xs-12 sm-12 az-blue-grey az-text-medium az-margin-t-28 az-margin-l-28"><i class="fas fa-tasks"><span class="menu2"></span> # <span id="TaskCount"></span></i></div>
+                </div>
+                <div class="az-row az-form-group az-margin-t-28">
+                    <div class="az-col xs-3 sm-3">
+                        <button type="button" class="az-button az-button-block default az-shadow-1 az-shadow-hover-2" id="cmdTaskOpen"></button>
+                    </div>
+                    <div class="az-col xs-3 sm-3">
+                        <button type="button" class="az-button az-button-block success az-shadow-1 az-shadow-hover-2" id="cmdTaskDone"></button>
+                    </div>
+                    <div class="az-col xs-3 sm-3">
+                        <button type="button" class="az-button az-button-block primary az-shadow-1 az-shadow-hover-2" id="cmdTaskAll"></button>
+                    </div>
+                    <div class="az-col xs-3 sm-3">
+                        <button type="button" class="az-button az-button-block info az-shadow-1 az-shadow-hover-2" id="cmdTaskNew"></button>
+                    </div>
+                </div>
+                <div class="az-row az-padding-t-28">
+                    <div class="az-col xs-12 sm-12">
+                        <div id="place_taskliste" class="az-accordion az-padding-r-7 az-padding-l-7">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="section3" class="az-section" style="display: none">
+            <div class="az-container az-bg-silver az-padding-t-56" style="height: 600px;">
+                <div class="az-col xs-12 sm-12 az-blue-grey az-text-medium az-margin-t-28 az-margin-l-28"><i class="fas fa-users"><span class="menu3"></span></i></div>
+            </div>
+        </div>
+        <div id="section4" class="az-section" style="display: none">
+            <div class="az-container az-bg-silver az-padding-t-56" style="height: 600px;">
+                <div class="az-col xs-12 sm-12 az-blue-grey az-text-medium az-margin-t-28 az-margin-l-28"><i class="fas fa-chart-line"><span class="menu4"></span></i></div>
+            </div>
+        </div>
+        <div id="section5" class="az-section" style="display: none">
+            <div class="az-container az-bg-silver az-padding-t-56" style="height: 600px;">
+                <div class="az-col xs-12 sm-12 az-blue-grey az-text-medium az-margin-t-28 az-margin-l-28"><i class="fas fa-calculator"><span class="menu5"></span></i></div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

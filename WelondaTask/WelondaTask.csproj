@@ -68,10 +68,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="api\delete_service.asp" />
     <Content Include="api\edituser.asp" />
     <Content Include="api\forgotpassword.asp" />
+    <Content Include="api\getservice_data.asp" />
     <Content Include="api\logginn.asp" />
-    <Content Include="default.asp" />
+    <Content Include="api\service_data.asp" />
+    <Content Include="default.html" />
     <Content Include="fpdb\land.mdb" />
     <Content Include="fpdb\postkontor.mdb" />
     <Content Include="fpdb\welonda.mdb" />
@@ -84,8 +87,9 @@
     <Content Include="lib\functionlib.js" />
     <Content Include="lib\lang-val\default.js" />
     <Content Include="lib\standard.css" />
-    <Content Include="login.asp" />
-    <Content Include="pages\edituser.asp" />
+    <Content Include="login.html" />
+    <Content Include="pages\edituser.html" />
+    <Content Include="pages\show_service.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +101,8 @@
     <Content Include="lib\lang-val\default\default-lang.json" />
     <Content Include="lib\lang-val\edituser\edituser-lang.json" />
     <Content Include="lib\lang-val\edituser\edituser-val.json" />
+    <Content Include="lib\lang-val\show_service\show_service-lang.json" />
+    <Content Include="lib\lang-val\show_service\show_service-val.json" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

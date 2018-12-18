@@ -44,16 +44,16 @@
         }       
         function setContentInfo()
         {                 
-         var radioState;
+         var radioState = localStorage.epostvarsel;
          $("#emailNotifacatin").click(function(){
-                if (radioState === this) {
-                $("#emailNotifacatin").val("true");
-                localStorage.epostvarsel = true
-                radioState = null;
+                if (radioState == "true") {
+                $("#emailNotifacatin").val("false");
+                localStorage.epostvarsel = "false"
+                radioState = "false";
                 } else {
-                    $("#emailNotifacatin").val("false");
-                    localStorage.epostvarsel = false
-                    radioState = this;
+                    $("#emailNotifacatin").val("true");
+                    localStorage.epostvarsel = "true"
+                    radioState = "true";
                 }            
             });
          $("#FirstName").val(localStorage.fornavn);
@@ -122,8 +122,7 @@
 			            localStorage.etternavn = $("#LastName").val();
 			            localStorage.userName = $("#Email").val();
 			            localStorage.epostvarsel = $("#emailNotifacatin").val();
-                        parent.$("#userFname").text("");
-                        parent.$("#userLname").text("");
+                        parent.$("#userFname,#userLname").text("");                        
                         parent.$("#userFname").append(localStorage.fornavn);
                         parent.$("#userLname").append(localStorage.etternavn);
                         formdirty = false;

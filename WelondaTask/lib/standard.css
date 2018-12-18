@@ -27,14 +27,14 @@ h6 {
 }
 
     .az-accordion-card > header {
-        background-color: #009688;
-        color: #FFFFFF;
+        background-color: #FFFFFF;
+        color: #000000;
     }
 
         .az-accordion-card > header > h1 {
-            font-size: 14px;
+            font-size: 16px;
         }
-
+        
     .az-accordion-card > article {
         background-color: #FFFFFF;
         color: #000000;
@@ -45,8 +45,13 @@ h6 {
         }
 
     .az-accordion-card > header.accordion-active {
-        background-color: #607d8b;
-    }
+        -moz-box-shadow: inset 0px 0px 1px #808080;
+        -webkit-box-shadow: inset 0px 0px 1px #808080;
+        box-shadow: inset 0px 0px 1px #808080;
+        border-left: 5px solid green !important;
+        background-color: #dddddd !important;
+        color: #000000 !important;
+    }        
 
 
 /* Card ---------*/
@@ -412,6 +417,14 @@ h6 {
     color: #FF0000;
 }
 
+/* Snackbar */
+#az-snackbar {
+    background-color: #333333;
+    color: #FFFFFF;
+    -webkit-box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    -moz-box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
 
 /* List ---------*/
 .az-list-card {
@@ -528,7 +541,6 @@ h6 {
 /* Navbar Bottom*/
 .az-navbar > .az-navbar-bottom-content {
     background-color: #000000;
-    
 }
 
     .az-navbar > .az-navbar-bottom-content > .az-navbar-menu > li {

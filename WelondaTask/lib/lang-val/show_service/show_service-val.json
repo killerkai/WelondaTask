@@ -1,0 +1,17 @@
+﻿{  
+  "PerformedBy": {
+    "label": "mandatory",
+    "data-attr": "val",
+    "maxlength": "50",
+    "class": "validate validate-alpha",
+    "datatype": "string",
+    "tabindex": 1
+  },
+  "Description": {
+    "label": "mandatory",
+    "data-attr": "val",
+    "class": "validate validate-alpha",
+    "datatype": "string",
+    "tabindex": 2
+  }
+}

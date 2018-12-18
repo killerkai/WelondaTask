@@ -1,28 +1,42 @@
 ﻿{
   "ObjElements": {
     "en-US": [
-      { "menu1": [ "id", "text", " Home" ] },
-      { "menu2": [ "id", "text", " Task" ] },
-      { "menu3": [ "id", "text", " Customers" ] },
-      { "menu4": [ "id", "text", " Statistics" ] },
-      { "menu5": [ "id", "text", " Calculation" ] },
-      { "signOut": [ "id", "text", " Sign Out" ] }
+      { "menu1": [ "class", "text", " Home" ] },
+      { "menu2": [ "class", "text", " Task" ] },
+      { "menu3": [ "class", "text", " Customers" ] },
+      { "menu4": [ "class", "text", " Statistics" ] },
+      { "menu5": [ "class", "text", " Calculation" ] },
+      { "signOut": [ "id", "text", " Sign Out" ] },
+      { "cmdShowTask": [ "class", "text", "Open" ] },
+      { "cmdDeleteTask": [ "class", "text", "Delete" ] },
+      { "cmdTaskOpen": [ "id", "text", "Open" ] },
+      { "cmdTaskDone": [ "id", "text", "Done" ] },
+      { "cmdTaskAll": [ "id", "text", "All" ] },
+      { "cmdTaskNew": [ "id", "text", "New" ] }
     ],
     "nb-NO": [
-      { "menu1": [ "id", "text", " Hjem" ] },
-      { "menu2": [ "id", "text", " Oppgaver" ] },
-      { "menu3": [ "id", "text", " Kunder" ] },
-      { "menu4": [ "id", "text", " Statistikk" ] },
-      { "menu5": [ "id", "text", " Utregning" ] },
-      { "signOut": [ "id", "text", " Logg ut" ] }
+      { "menu1": [ "class", "text", " Hjem" ] },
+      { "menu2": [ "class", "text", " Oppgaver" ] },
+      { "menu3": [ "class", "text", " Kunder" ] },
+      { "menu4": [ "class", "text", " Statistikk" ] },
+      { "menu5": [ "class", "text", " Utregning" ] },
+      { "signOut": [ "id", "text", " Logg ut" ] },
+      { "cmdShowTask": [ "class", "text", "Åpne" ] },
+      { "cmdDeleteTask": [ "class", "text", "Slett" ] },
+      { "cmdTaskOpen": [ "id", "text", "Åpene" ] },
+      { "cmdTaskDone": [ "id", "text", "Utførte" ] },
+      { "cmdTaskAll": [ "id", "text", "Alle" ] },
+      { "cmdTaskNew": [ "id", "text", "Ny" ] }
     ]
   },
   "SingleElements": {
     "en-US": {
-      "LabeleditUserTitle": "Edit user"
+      "LabeleditUserTitle": "Edit user",
+      "LabeleditTaskTitle": "Edit Task"
     },
     "nb-NO": {
-      "LabeleditUserTitle": "Rediger bruker"
+      "LabeleditUserTitle": "Rediger bruker",
+      "LabeleditTaskTitle": "Rediger oppgave"
     }
   }
 }
