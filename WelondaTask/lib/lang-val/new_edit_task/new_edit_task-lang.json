@@ -1,0 +1,69 @@
+﻿{
+  "ObjElements": {
+    "en-US": [
+      { "labelCustomer": [ "id", "text", "Customer:" ] },
+      { "labelAdress": [ "id", "text", "Adress:" ] },
+      { "labelPhone": [ "id", "text", "Phone:" ] },
+      { "labelTaskNo": [ "id", "text", "Task No.:" ] },
+      { "labelRegDate": [ "id", "text", "Reg Date:" ] },
+      { "labelDoDate": [ "id", "text", "Do Date:" ] },
+      { "labelPerformedBy": [ "id", "text", "PerformedBy:" ] },
+      { "OptionNotSelectedTxt": [ "class", "text", "Choose..." ] },
+      { "labelDescription": [ "id", "text", "Description:" ] },
+      { "labelDoneDate": [ "id", "text", "Done Date:" ] },
+      { "labelBilled": [ "id", "text", "Billed:" ] },
+      { "BilledOption1": [ "id", "text", "No" ] },
+      { "BilledOption2": [ "id", "text", "Yes" ] },
+      { "BilledOption3": [ "id", "text", "Warrenty" ] },
+      { "BilledOption4": [ "id", "text", "Picked up / Delivered" ] },
+      { "labelStatus": [ "id", "text", "Status:" ] },
+      { "StatusOption1": [ "id", "text", "Open" ] },
+      { "StatusOption2": [ "id", "text", "Finished" ] },
+      { "StatusOption3": [ "id", "text", "Open / Urgency" ] },
+      { "labelDoneBy": [ "id", "text", "Done By:" ] },
+      { "labelDoneDescription": [ "id", "text", "Done Description:" ] },
+      { "Imagewidth": [ "id", "placeholder", "Image width in px" ] },
+      { "LableImageZip": [ "id", "text", "Zip file" ] },
+      { "Image_text": [ "id", "text", "Upload Image" ] }
+    ],
+    "nb-NO": [
+      { "labelCustomer": [ "id", "text", "Kunde:" ] },
+      { "labelAdress": [ "id", "text", "Adresse:" ] },
+      { "labelPhone": [ "id", "text", "Tlf:" ] },
+      { "labelTaskNo": [ "id", "text", "OppgaveNr.:" ] },
+      { "labelRegDate": [ "id", "text", "Reg dato:" ] },
+      { "labelDoDate": [ "id", "text", "Ønsket dato:" ] },
+      { "labelPerformedBy": [ "id", "text", "Utføres Av:" ] },
+      { "OptionNotSelectedTxt": [ "class", "text", "Velg..." ] },
+      { "labelDescription": [ "id", "text", "Beskrivelse:" ] },
+      { "labelDoneDate": [ "id", "text", "Utført dato:" ] },
+      { "labelBilled": [ "id", "text", "Fakturert:" ] },
+      { "BilledOption1": [ "id", "text", "Nei" ] },
+      { "BilledOption2": [ "id", "text", "Ja" ] },
+      { "BilledOption3": [ "id", "text", "Garanti" ] },
+      { "BilledOption4": [ "id", "text", "Hentet / Levert" ] },
+      { "labelStatus": [ "id", "text", "Status:" ] },
+      { "StatusOption1": [ "id", "text", "Åpen" ] },
+      { "StatusOption2": [ "id", "text", "Fullført" ] },
+      { "StatusOption3": [ "id", "text", "Åpen / Haster" ] },
+      { "labelDoneBy": [ "id", "text", "Utført Av:" ] },
+      { "labelDoneDescription": [ "id", "text", "Uført beskrivelse:" ] },
+      { "Imagewidth": [ "id", "placeholder", "Bilde bredde i px" ] },
+      { "LableImageZip": [ "id", "text", "Zip fil" ] },
+      { "Image_text": [ "id", "text", "Last opp bilde" ] }
+    ]
+  },
+  "SingleElements": {
+    "en-US": {
+      "CustomerSubmitError": "Customer is empty or contains invalid characters.",
+      "PerformedBySubmitError": "Performed by is empty.",
+      "DescriptionSubmitError": "Description is empty or contains invalid characters."
+    },
+    "nb-NO": {
+      "CustomerSubmitError": "Kunde er tom eller inneholder ugyldige tegn.",
+      "PerformedBySubmitError": "Utføres av er ikke valgt.",
+      "DescriptionSubmitError": "Beskrivelse er tom eller inneholder ugyldige tegn."
+
+    }
+  }
+}

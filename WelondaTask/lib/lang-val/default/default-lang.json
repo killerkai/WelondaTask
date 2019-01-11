@@ -12,7 +12,7 @@
       { "cmdTaskOpen": [ "id", "text", "Open" ] },
       { "cmdTaskDone": [ "id", "text", "Done" ] },
       { "cmdTaskAll": [ "id", "text", "All" ] },
-      { "cmdTaskNew": [ "id", "text", "New" ] }
+      { "cmdNewTask": [ "id", "text", "New" ] }
     ],
     "nb-NO": [
       { "menu1": [ "class", "text", " Hjem" ] },
@@ -22,21 +22,27 @@
       { "menu5": [ "class", "text", " Utregning" ] },
       { "signOut": [ "id", "text", " Logg ut" ] },
       { "cmdShowTask": [ "class", "text", "Åpne" ] },
-      { "cmdDeleteTask": [ "class", "text", "Slett" ] },
+      { "cmdDeleteTask": [ "class", "text", "Slette" ] },
       { "cmdTaskOpen": [ "id", "text", "Åpene" ] },
       { "cmdTaskDone": [ "id", "text", "Utførte" ] },
       { "cmdTaskAll": [ "id", "text", "Alle" ] },
-      { "cmdTaskNew": [ "id", "text", "Ny" ] }
+      { "cmdNewTask": [ "id", "text", "Ny" ] }
     ]
   },
   "SingleElements": {
     "en-US": {
       "LabeleditUserTitle": "Edit user",
-      "LabeleditTaskTitle": "Edit Task"
+      "LabeleditTaskTitle": "Edit Task",
+      "LabelnewTaskTitle": "New Task",
+      "LabelcmdTaskOpen": "Edit",
+      "LabelcmdDeleteTask": "Delete"
     },
     "nb-NO": {
       "LabeleditUserTitle": "Rediger bruker",
-      "LabeleditTaskTitle": "Rediger oppgave"
+      "LabeleditTaskTitle": "Rediger oppgave",
+      "LabelnewTaskTitle": "Ny oppgave",
+      "LabelcmdTaskOpen": "Rediger",
+      "LabelcmdDeleteTask": "Slette"
     }
   }
 }

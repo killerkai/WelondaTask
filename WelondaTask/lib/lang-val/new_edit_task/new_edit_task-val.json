@@ -1,0 +1,25 @@
+﻿{
+  "Customer": {
+    "label": "mandatory",
+    "data-attr": "val",
+    "maxlength": "50",
+    "class": "validate validate-alpha",
+    "datatype": "string",
+    "tabindex": 1
+  },
+  "PerformedBy": {
+    "label": "mandatory",
+    "data-attr": "val",
+    "maxlength": "50",
+    "class": "validate validate-alpha",
+    "datatype": "string",
+    "tabindex": 2
+  },
+  "Description": {
+    "label": "mandatory",
+    "data-attr": "val",
+    "class": "validate validate-alpha",
+    "datatype": "string",
+    "tabindex": 3
+  }
+}

@@ -48,11 +48,12 @@
         {
             $( "#cmdModalUser" ).off( "click", setModalUser ).on( "click", setModalUser );
             $( "#cmdSignOut" ).click( function () { signOut(); } );
-            $( "#cmdTaskOpen" ).click( function () { LastAccordion = ""; getservicelist( "apene_full" ); } );
-            $( "#cmdTaskDone" ).click( function () { LastAccordion = ""; getservicelist( "ut_full" ); } );
-            $( "#cmdTaskAll" ).click( function () { LastAccordion = ""; getservicelist( "alle_full" ); } );           
+            $( "#cmdNewTask" ).click( function () { setModalNewTask(); } );
+            $( "#cmdTaskOpen" ).click( function () { $( "#place_taskliste, #TaskCount" ).empty(); LastAccordion = ""; getservicelist( event, "apene_full" ); } );
+            $( "#cmdTaskDone" ).click( function () { $( "#place_taskliste, #TaskCount" ).empty(); LastAccordion = ""; getservicelist( event, "ut_full" ); } );
+            $( "#cmdTaskAll" ).click( function () { $( "#place_taskliste, #TaskCount" ).empty(); LastAccordion = ""; getservicelist( event, "alle_full" ); } );
             $( "#menu1" ).click( function () { changeInOut( activePage, "section1" ); } );
-            $( "#menu2" ).click( function () { changeInOut( activePage, "section2" ); getservicelist( "apene_full" ); } );
+            $( "#menu2" ).click( function () { changeInOut( activePage, "section2" ); LastAccordion = ""; getservicelist( "", "apene_full" ); } );
             $( "#menu3" ).click( function () { changeInOut( activePage, "section3" ); } );
             $( "#menu4" ).click( function () { changeInOut( activePage, "section4" ); } );
             $( "#menu5" ).click( function () { changeInOut( activePage, "section5" ); } );
@@ -85,7 +86,19 @@
             }, 500 );
 
         }
-
+        function setModalNewTask()
+        {
+            initializeModalDialog(
+                {
+                    dialogTitle: SingleElements.LabelnewTaskTitle,
+                    dialogWidth: 700,
+                    dialogHeight: 600,
+                    dialogiFrameURL: "pages/new_task.html?UserId=" + localStorage.brukerid + "&FirstName=" + localStorage.fornavn,
+                    dialogPosition: true,
+                    dialogNoParentScroll: true,
+                    dialogTitlebarClose: false
+                } );
+        }
         function setModalShowTask( TaskId, TaskNo, KundeId )
         {
             initializeModalDialog(
@@ -93,7 +106,7 @@
                     dialogTitle: SingleElements.LabeleditTaskTitle + " # " + TaskNo,
                     dialogWidth: 700,
                     dialogHeight: 600,
-                    dialogiFrameURL: "pages/show_service.html?TaskId=" + TaskId + "&KundeId=" + KundeId,
+                    dialogiFrameURL: "pages/edit_task.html?TaskId=" + TaskId + "&KundeId=" + KundeId,
                     dialogPosition: true,
                     dialogNoParentScroll: true,
                     dialogTitlebarClose: false
@@ -177,7 +190,8 @@
                         }
                         if ( responseText.Transfer == "ok" )
                         {
-                            getservicelist( "apene_full" );
+                            LastAccordion = "";
+                            getservicelist( "", "apene_full" );
                             showSnackbar(
                                 {
                                     snackbarText: SingleDefaultElements.alertContentDeletedText
@@ -193,18 +207,29 @@
             initializeModalDialog(
                 {
                     dialogTitle: SingleElements.LabeleditUserTitle,
-                    dialogWidth: 600,
-                    dialogHeight: 250,
+                    dialogWidth: 800,
+                    dialogHeight: 450,
                     dialogiFrameURL: "pages/edituser.html",
-                    dialogPosition: true,
-                    dialogPositionOf: $( "#cmdModalUser" ),
+                    dialogPosition: true,                    
                     dialogNoParentScroll: true,
                     dialogTitlebarClose: false,
                     dialogNoParentScroll: true
                 } );
         }
-        function getservicelist( sort )
-        {
+        function getservicelist( evt, sort )
+        {              
+            $( ".tablinks" ).each( function ()
+            {
+                $( this ).switchClass( "active", "" );
+            } );
+            if ( evt == "" )
+            {
+                $( "#cmdTaskOpen" ).addClass( "active" );                
+            }
+            else
+            {                   
+                $( evt.currentTarget ).addClass( "active" );                 
+            }
             showCoverSpin();
             var output = "mode=" + escape( sort ) + "&kundeid=" + $( "#kundeID" ).val() + "&utforesav=" + localStorage.brukerid;
             $.ajaxSetup( { cache: false } );
@@ -231,45 +256,65 @@
                     success: function ( responseText )
                     {
                         var _HTML = "";
-                        servicelistekunde = responseText.service;                        
+                        servicelistekunde = responseText.service;
                         $( "#TaskCount" ).text( responseText.service.length );
                         $.each( servicelistekunde, function ( i, val )
-                        {                            
+                        {
                             _HTML += '<div data-taskno=" ' + val.servicenummer + ' " data-kundeId=" ' + val.kundeid + ' " data-taskid=" ' + val.serviceid + ' " class="az-accordion-card">';
                             if ( val.status == 1 && val.fakturert > 0 ) // service er fullført
                             {
-                                _HTML += '<header class="az-bg-green">';
+                                _HTML += '<header style="background-color: #dff0d8;">';
                             }
                             else if ( val.status == 2 ) // service er åpen + haster
                             {
-                                _HTML += '<header class="az-bg-red">';
+                                _HTML += '<header style="background-color: #f2dede;">';
                             }
                             else if ( val.status == 0 ) // service er åpen
                             {
-                                _HTML += '<header class="az-bg-white">';
+                                _HTML += '<header style="background-color: #fcf8e3;">';
                             }
-                            _HTML += '<h1><i class="fas fa-bars"></i><span class="az-margin-l-14 LinkShowTask">' + val.servicenummer + '</span><span class="az-margin-l-14">' + val.regdato + '</span><span class="az-margin-l-14">' + val.kunde + '</span><span class="az-margin-l-14">' + val.beskrivelseingress + '</span></h>';
+                            else if ( val.status == 1 && val.fakturert == 0 ) // service er fullført men ikke fakturert
+                            {
+                                _HTML += '<header style="background-color: #dff0d8;">';
+                            }
+                            _HTML += '<h1><i class="fas fa-bars"></i><span class="az-margin-l-14 LinkShowTask">' + val.servicenummer + '</span><span class="az-margin-l-14">' + val.regdato + '</span><span class="az-margin-l-14">' + val.kunde + '</span><span class="az-margin-l-14">' + val.beskrivelseingress + '</span><span class="az-margin-l-14">' + val.onsketdato + '</span></h>';
                             _HTML += '</header>';
                             _HTML += '<article class="az-bg-silver borderLeftGreen shadowInner">';
                             _HTML += '<p>' + val.beskrivelse + '</p>';
                             _HTML += '<p>' + val.ubeskrivelse + '</p>';
                             _HTML += '<p>&nbsp;</p>';
-                            _HTML += '<button type="button" class="az-button az-shadow-1 az-shadow-hover-2 cmdShowTask"></button>';
+                            _HTML += '<button type="button" class="az-button az-shadow-1 az-shadow-hover-2 cmdShowTask">' + SingleElements.LabelcmdTaskOpen +'</button>';
                             if ( val.status == 2 || val.status == 0 )
                             {
-                                _HTML += '<button type="button" class="az-button az-shadow-1 az-shadow-hover-2 cmdDeleteTask"></button>';
-                            }                            
+                                _HTML += '<button type="button" class="az-button az-shadow-1 az-shadow-hover-2 cmdDeleteTask">' + SingleElements.LabelcmdDeleteTask +'</button>';
+                            }
+                            _HTML += '<p>&nbsp;</p>';
+                            if ( val.status == 1 && val.fakturert > 0 ) // service er fullført
+                            {
+                                _HTML += '<p style="width: 70px;background-color: #dff0d8;"><i class="fas fa-check-circle"></i> Fullført</p>';
+                            }
+                            else if ( val.status == 2 ) // service er åpen + haster
+                            {
+                                _HTML += '<p style="width: 120px;background-color: #f2dede;"><i class="fas fa-check-circle"></i> Åpen og Haster</p>';
+                            }
+                            else if ( val.status == 0 ) // service er åpen
+                            {
+                                _HTML += '<p style="width: 55px;background-color: #fcf8e3;"><i class="fas fa-check-circle"></i> Åpen</p>';
+                            }
+                            else if ( val.status == 1 && val.fakturert == 0 ) // service er fullført men ikke fakturert
+                            {
+                                _HTML += '<p style="width: 115px;background-color: #dff0d8;"><i class="fas fa-check-circle"></i> Til fakturering</p>';
+                            }
                             _HTML += "</article>";
                             _HTML += "</div>";
                         } ),
 
-                        $( "#place_taskliste" ).empty().append( _HTML );                       
-                        setAccordion( LastAccordion );
-                       // getContentData();
+                        $( "#place_taskliste" ).empty().append( _HTML );                        
+                        setAccordion( LastAccordion );                                                
                         var _$AccordionCard = $( ".az-accordion-card" );
                         _$AccordionCard.off().on( "click", function ( e )
                         {
-                            var _Element = e.target || e.srcElement;                            
+                            var _Element = e.target || e.srcElement;
                             var _TaskId = Number( $( this ).attr( 'data-taskid' ) );
                             var _TaskNo = Number( $( this ).attr( 'data-taskno' ) );
                             var _KundeId = Number( $( this ).attr( 'data-kundeId' ) );
@@ -295,27 +340,100 @@
                             }
                         } );
                     }
-                } );
+                } );            
             hideCoverSpin();
         }
 
     </script>
     <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
         #place_taskliste {
             height: 400px;
             overflow: auto;
         }
 
         .borderLeftGreen {
-            border-left: 5px solid green !important;
+            border-left: 5px solid #0bb2d4 !important;
         }
 
         .LinkShowTask {
             border-bottom: 1px solid blue !important;
         }
+        /* Style the tab */
+        .tabTask {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            list-style-type: none;            
+        }
+
+        /* Style the buttons that are used to open the tab content */
+        .tabTask li {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            width: 50px;           
+        }
+
+        /* Change background color of buttons on hover */
+        .tabTask li:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tabTask li.active {
+            background-color: #ccc;
+        }
+        .badge {
+            display: block;
+            position: absolute;
+            top: 32px;
+            left: 3px;
+            line-height: 16px;
+            height: 16px;
+            padding: 0 5px;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-shadow: 0 1px rgba(0, 0, 0, 0.25);
+            border: 1px solid;
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px 1px rgba(0, 0, 0, 0.08);
+            box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px 1px rgba(0, 0, 0, 0.08);
+            background: #0bb2d4;
+            border-color: #30aae9;
+            
+        }
+        #cmdNewTask {
+            /*position: fixed;*/
+            top: -20px;
+            right: -5px;
+            display: block;
+            position: absolute;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0bb2d4;
+            border-color: #30aae9;
+            border: 1px solid;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-shadow: 0 1px rgba(0, 0, 0, 0.25);
+            cursor: pointer; 
+            outline: none;
+        }        
+
     </style>
 </head>
-<body class="az-bg-white">
+<body>
     <form id="frmReg" class="az-bg-white">
 
         <div class="az-navbar az-navbar-top az-navbar-sticky">
@@ -340,7 +458,7 @@
 
         <div class="az-navbar az-navbar-bottom az-navbar-sticky">
             <div class="az-navbar-bottom-content ka-text-center">
-                <div class="az-col xs-12 az-white az-text-tiny "><i class="fas fa-copyright fa-fw "></i>2018 Welonda Norway AS</div>
+                <div class="az-col xs-12 az-white az-text-tiny "><i class="fas fa-copyright fa-fw "></i>2019 Welonda Norway AS</div>
             </div>
         </div>
 
@@ -351,27 +469,24 @@
         </div>
         <div id="section2" class="az-section" style="display: none">
             <div class="az-container az-bg-silver az-padding-t-56" style="height: 600px;">
-                <div class="az-row">
-                    <div class="az-col xs-12 sm-12 az-blue-grey az-text-medium az-margin-t-28 az-margin-l-28"><i class="fas fa-tasks"><span class="menu2"></span> # <span id="TaskCount"></span></i></div>
-                </div>
-                <div class="az-row az-form-group az-margin-t-28">
-                    <div class="az-col xs-3 sm-3">
-                        <button type="button" class="az-button az-button-block default az-shadow-1 az-shadow-hover-2" id="cmdTaskOpen"></button>
-                    </div>
-                    <div class="az-col xs-3 sm-3">
-                        <button type="button" class="az-button az-button-block success az-shadow-1 az-shadow-hover-2" id="cmdTaskDone"></button>
-                    </div>
-                    <div class="az-col xs-3 sm-3">
-                        <button type="button" class="az-button az-button-block primary az-shadow-1 az-shadow-hover-2" id="cmdTaskAll"></button>
-                    </div>
-                    <div class="az-col xs-3 sm-3">
-                        <button type="button" class="az-button az-button-block info az-shadow-1 az-shadow-hover-2" id="cmdTaskNew"></button>
-                    </div>
-                </div>
-                <div class="az-row az-padding-t-28">
+                <div class="az-row az-margin-t-28 az-margin-l-28">
+                    <div class="az-col xs-8 sm-8 az-blue-grey az-text-medium"><i class="fas fa-tasks"><span class="menu2"></span></i></div>
+                    
+                </div>                
+                <div class="az-row az-margin-t-14 az-padding-r-28 az-padding-l-28">
                     <div class="az-col xs-12 sm-12">
-                        <div id="place_taskliste" class="az-accordion az-padding-r-7 az-padding-l-7">
-                        </div>
+                        <ul class="tabTask">
+                            <li class="az-shadow-1 az-shadow-hover-2 tablinks" id="cmdTaskOpen"></li>
+                            <li class="az-shadow-1 az-shadow-hover-2 tablinks" id="cmdTaskDone"></li>
+                            <li class="az-shadow-1 az-shadow-hover-2 tablinks" id="cmdTaskAll"></li>
+                        </ul>
+                        <span id="TaskCount" class="badge"></span>
+                        <button type="button" class="az-button az-button-block info az-shadow-1 az-shadow-hover-2" id="cmdNewTask"></button>
+                    </div>                    
+                </div>
+                <div class="az-row">
+                    <div class="az-col xs-12 sm-12">
+                        <div id="place_taskliste" class="az-accordion az-padding-r-28 az-padding-l-28"></div>
                     </div>
                 </div>
             </div>

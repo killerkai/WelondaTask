@@ -22,8 +22,8 @@ If taskid <> "" Then
 	rs.LockType = 3
 	rs.Open strSQL, conn
 	
-	'rs.Delete
-	'rs.Update
+	rs.Delete
+	rs.Update
 	
 	Conn.Close
 	Set Conn = Nothing

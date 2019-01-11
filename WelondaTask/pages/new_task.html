@@ -1,0 +1,383 @@
+﻿<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="date=no" />
+    <meta name="format-detection" content="address=no" />
+    <meta name="format-detection" content="email=no" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title></title>
+    <link rel="stylesheet" href="//cdn.web2net.no/lib-1.0.0/css/az-1.0.0.min.css" />
+    <script src="//cdn.web2net.no/lib-1.0.0/js/az-1.0.0.min.js"></script>
+    <link href="../lib/standard.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon" />
+    <script src="../lib/functionlib.js"></script>
+    <script>
+        if ( !localStorage.bruker || localStorage.bruker == "" )
+        {
+            window.location.href = "../login.asp";
+        }
+
+        LanguagePage = "../lib/lang-val/new_edit_task/new_edit_task-lang.json";
+        ValidationPage = "../lib/lang-val/new_edit_task/new_edit_task-val.json";
+        var urlParameters = getURLParameters( window.location.href );
+        var UserId = $.urlParam( "UserId" );
+        var FirstName = $.urlParam( "FirstName" );
+        var CustomerId = "";
+        $( document ).ready( function ()
+        {
+            getContentData();
+        } );
+
+        function getContentData()
+        {
+            initializePage(
+                {
+                    setLanguageClientStorage: true,
+                    getLanguage: true,
+                    getValidation: true
+                }, function ()
+                {
+                    setContentInfo();
+                } );
+        }
+        function setContentInfo()
+        {
+            $( "#ResetDoDate" ).click( function ()
+            {
+                if ( !$( "#DoDate" ).val() == "" )
+                {
+                    $( "#Status" ).val( "0" );
+                    $( "#DoDate" ).val( "" );
+                }
+                if ( !$( "#DoneDate" ).val() == "" )
+                {
+                    $( "#Status" ).val( "1" );
+                }
+
+            } );
+            $( "#ResetDoneDate" ).click( function ()
+            {
+                if ( !$( "#DoneDate" ).val() == "" )
+                {
+                    $( "#Status" ).val( "0" );
+                    $( "#DoneDate" ).val( "" );
+                }
+                if ( !$( "#DoDate" ).val() == "" )
+                {
+                    $( "#Status" ).val( "2" );
+                }
+            } );
+            $( "#DoDate" ).blur( function () { $( "#Status" ).val( "2" ) } );
+            $( "#DoneDate" ).blur( function () { $( "#Status" ).val( "1" ) } );
+            formdirty = false;
+            $( ".TaskInfo" ).hide();
+            GetCustomer();
+            hideCoverSpin();
+            $( "#" + ThisFormId ).show();
+        }
+        function GetCustomer()
+        {
+            $( "#Customer" ).autocomplete(
+                {
+                    source: function ( request, response )
+                    {
+                        $data = { kundesok: request.term };
+                        $.ajax(
+                            {
+                                type: "POST",
+                                url: "../api/kunder_sok.asp",
+                                dataType: "json",
+                                data: $data,
+
+                                success: function ( data )
+                                {
+                                    response( $.map( data, function ( item )
+                                    {
+                                        return {
+                                            label: item.kunde + ", " + item.sted,
+                                            value: item.kunde,
+                                            org: item.org,
+                                            adresse: item.adresse,
+                                            postnr: item.postnr,
+                                            sted: item.sted,
+                                            info: item.info,
+                                            tlf: item.tlf,
+                                            kontaktperson: item.kontaktperson,
+                                            mobil: item.mobil,
+                                            epost: item.epost,
+                                            dato: item.dato,
+                                            status: item.status,
+                                            kundeid: item.kundeID
+
+                                        }
+                                    } ) );
+                                }
+                            } );
+                    },
+                    minLength: 1,
+                    select: function ( event, ui )
+                    {
+                        $( "#Adress" ).text( "" );
+                        $( "#Phone" ).text( "" );
+                        //Link til Google
+                        var str1 = "http://maps.google.com/?q=";
+                        var str2 = ui.item.adresse;
+                        var str3 = "+";
+                        var str4 = ui.item.postnr;
+                        var str5 = ui.item.sted;
+                        var res1 = str1.concat( str2 ).concat( str3 ).concat( str4 ).concat( str5 );
+                        $( "#linkkart" ).attr( "href", res1 );
+                        var str6 = ",&nbsp;";
+                        var str7 = "&nbsp;";
+                        var res2 = str2.concat( str6 ).concat( str4 ).concat( str7 ).concat( str5 );
+                        $( "#Adress" ).append( res2 );
+                        //Link til telefon
+                        var str1 = "Tel:";
+                        var str2 = ui.item.tlf;
+                        var res = str1.concat( str2 );
+                        $( "#CallPhone" ).attr( "href", res );
+                        $( "#Phone" ).append( ui.item.tlf );
+                        $( "#RegDate" ).datepicker( { dateFormat: "dd/mm/yy" } ).datepicker( "setDate", new Date() );
+                        $( ".TaskInfo" ).show();
+                        CustomerId = ui.item.kundeid;                        
+                    }
+                } );
+
+        }
+        function validateDirty()
+        {
+            formdirty = true;
+            $( "#cmdClose" ).text( SingleDefaultElements.cmdCancelText );
+        }
+        function verifyCancel()
+        {
+            confirmCancel( function () { window.top.closeModalDialog() } );
+        }
+
+        function verifySubmit()
+        {
+            var _ObjForm = serializeForm( "#" + ThisFormId );
+            if ( isEmpty( _ObjForm ) == false )
+            {
+                showCoverSpin();
+                var serviceid = "";
+                var servicenr = "";
+                var regdato = $( "#RegDate" ).val();
+                var onsketdato = $( "#DoDate" ).val();
+                var motattav = $( "#PerformedBy" ).val();
+                var beskrivelse = $( "#Description" ).val();
+                var udato = $( "#DoneDate" ).val();
+                var fakturert = $( "#Billed" ).val();
+                var status = $( "#Status" ).val();
+                var utfortav = $( "#DoneBy" ).val();
+                var ubeskrivelse = $( "#DoneDescription" ).val();
+
+                beskrivelse = beskrivelse.replace( /(\r\n|\n|\r)/gm, "" );
+                ubeskrivelse = ubeskrivelse.replace( /(\r\n|\n|\r)/gm, "" );
+
+                var output = "mode=lagreservice"
+                    + "&txtkundeid=" + CustomerId + ""
+                    + "&txtserviceid=" + serviceid + ""
+                    + "&txtservicenr=" + servicenr + ""
+                    + "&txtregdato=" + regdato + ""
+                    + "&txtonsketdato=" + onsketdato + ""
+                    + "&txtmotattav=" + motattav + ""
+                    + "&txtbeskrivelse=" + escape( beskrivelse ) + ""
+                    + "&txtudato=" + udato + ""
+                    + "&txtfakturert=" + escape( fakturert ) + ""
+                    + "&txtstatus=" + status + ""
+                    + "&txtutfortav=" + utfortav + ""
+                    + "&txtbrukerid=" + UserId + ""
+                    + "&txtbrukernavn=" + FirstName + ""
+                    + "&txtubeskrivelse=" + escape( ubeskrivelse );
+
+                $.ajaxSetup( { cache: false } );
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "../api/service_data.asp",
+                        data: output,
+                        dataType: 'json',
+                        async: true,
+                        cache: false,
+                        timeout: 100000,
+                        error: function ()
+                        {
+                            hideCoverSpin();
+                            initializeAZWindow(
+                                {
+                                    dialogTitle: SingleDefaultElements.errorDialogAlertTitle,
+                                    dialogText: SingleDefaultElements.LoadDataError
+                                } );
+
+
+                        },
+                        success: function ( responseText )
+                        {
+                            hideCoverSpin();
+                            parent.LastAccordion = "";
+                            closeModalDialog( { dialogClose: function () { parent.getservicelist( "", "apene_full" ); } } );
+
+                            showSnackbar(
+                                {
+                                    snackbarText: SingleDefaultElements.labelTopsliderChangesHaveBeenSaved
+                                } );
+                            formdirty = false;
+                            $( "#cmdClose" ).text( SingleDefaultElements.cmdCloseText );
+                        }
+                    } );
+
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+
+    <form class="disabled-enter" id="frmContact" style="display: none;">
+        <div class="az-container">
+
+            <div class="az-row az-padding-t-14">
+                <div class="az-col xs-12 sm-12">
+                    <div class="az-form-group">
+                        <label class="az-label" for="Customer" id="labelCustomer"></label>
+                        <input type="text" class="az-input" id="Customer" autofocus />
+                    </div>
+                </div>
+                <section class="TaskInfo">
+                    <div class="az-col xs-12 sm-6">
+                        <div class="az-form-group">
+                            <a id="linkkart" href="#" target="_blank">
+                                <label class="az-label" for="Adress" id="labelAdress"></label>
+                                <p id="Adress"></p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="az-col xs-12 sm-6">
+                        <div class="az-form-group">
+                            <a id="CallPhone" href="#" target="_blank">
+                                <label class="az-label" for="Phone" id="labelPhone"></label>
+                                <p id="Phone"></p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="az-row">
+                        <div class="az-col xs-6 sm-3">
+                            <div class="az-form-group">
+                                <label class="az-label" for="TaskNo" id="labelTaskNo"></label>
+                                <input type="text" class="az-input readonly" id="TaskNo" />
+                            </div>
+                        </div>
+                        <div class="az-col xs-6 sm-3">
+                            <div class="az-form-group">
+                                <label class="az-label" for="RegDate" id="labelRegDate"></label>
+                                <input type="text" class="az-input readonly" id="RegDate" />
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                        </div>
+                        <div class="az-col xs-6 sm-3">
+                            <div class="az-form-group">
+                                <label class="az-label" for="DoDate" id="labelDoDate"></label>
+                                <input type="text" class="az-input nopastdate readonly" id="DoDate" />
+                                <i id="ResetDoDate" class="fas fa-calendar-alt"></i>
+                            </div>
+                        </div>
+                        <div class="az-col xs-6 sm-3">
+                            <div class="az-form-group">
+                                <label class="az-label" for="PerformedBy" id="labelPerformedBy"></label>
+                                <select id="PerformedBy" class="az-select">
+                                    <option class="OptionNotSelectedTxt" value="0"></option>
+                                    <option value="1">Kai</option>
+                                    <option value="2">Frode</option>
+                                    <option value="3">Caroline</option>
+                                    <option value="4">Demo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="az-row">
+                        <div class="az-col xs-12 sm-12">
+                            <div class="az-form-group">
+                                <label class="az-label" for="Description" id="labelDescription"></label>
+                                <textarea id="Description" class="az-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="az-row">
+                        <div class="az-col xs-6 sm-3">
+                            <div class="az-form-group">
+                                <label class="az-label" for="DoneDate" id="labelDoneDate"></label>
+                                <input type="text" class="az-input pastdate readonly" id="DoneDate" />
+                                <i id="ResetDoneDate" class="fas fa-calendar-alt"></i>
+                            </div>
+                        </div>
+                        <div class="az-col xs-6 sm-3">
+                            <div class="az-form-group">
+                                <label class="az-label" for="Billed" id="labelBilled"></label>
+                                <select id="Billed" class="az-select">
+                                    <option class="OptionNotSelectedTxt" value="0"></option>
+                                    <option id="BilledOption1" value="1"></option>
+                                    <option id="BilledOption2" value="2"></option>
+                                    <option id="BilledOption3" value="3"></option>
+                                    <option id="BilledOption4" value="4"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="az-col xs-6 sm-3">
+                            <div class="az-form-group">
+                                <label class="az-label" for="Status" id="labelStatus"></label>
+                                <select id="Status" class="az-select">
+                                    <option id="StatusOption1" value="0"></option>
+                                    <option id="StatusOption2" value="1"></option>
+                                    <option id="StatusOption3" value="2"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="az-col xs-6 sm-3">
+                            <div class="az-form-group">
+                                <label class="az-label" for="DoneBy" id="labelDoneBy"></label>
+                                <select id="DoneBy" class="az-select">
+                                    <option class="OptionNotSelectedTxt" value="0"></option>
+                                    <option value="1">Kai</option>
+                                    <option value="2">Frode</option>
+                                    <option value="3">Caroline</option>
+                                    <option value="3">Demo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="az-row">
+                        <div class="az-col xs-12 sm-12">
+                            <div class="az-form-group">
+                                <label class="az-label" for="DoneDescription" id="labelDoneDescription"></label>
+                                <textarea id="DoneDescription" class="az-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="az-row az-margin-t-14 az-margin-b-14">
+                    <div class="az-col xs-12 sm-6 TaskInfo">
+                        <div class="az-form-group">
+                            <button type="button" class="az-button az-button-block primary az-shadow-1 az-shadow-hover-2 submit" id="cmdSubmit"></button>
+                        </div>
+                    </div>
+                    <div class="az-col xs-12 sm-6">
+                        <div class="az-form-group">
+                            <button type="button" class="az-button az-button-block info az-shadow-1 az-shadow-hover-2 cancel" id="cmdClose"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</body>
+</html>
